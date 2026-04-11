@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gestion Gana Ousmane</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f4f6f9;}
+header{background:#1e3a8a;color:white;text-align:center;padding:20px;}
+.container{width:95%;max-width:1000px;margin:20px auto;background:white;padding:20px;border-radius:10px;}
+input{padding:8px;margin:5px;}
+button{padding:6px 10px;background:#1e3a8a;color:white;border:none;cursor:pointer;}
+button:hover{background:#162d66;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:8px;text-align:center;}
+th{background:#1e3a8a;color:white;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);}
+.modal-content{background:white;margin:100px auto;padding:20px;width:90%;max-width:600px;border-radius:10px;}
+.close{float:right;cursor:pointer;color:red;font-size:20px;}
+.photo-mini{width:35px;height:35px;border-radius:50%;vertical-align:middle;margin-right:6px;object-fit:cover;}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>GESTION GANA OUSMANE SARL</h2>
+<p>27 21 72 41 77 | contact@estganaousmanesarl.com | 11 BP 2399 Abidjan 11</p>
+</header>
+
+<div class="container">
+
+<h3>Ajouter un Employé</h3>
+Nom <input type="text" id="nom">
+Prénom <input type="text" id="prenom">
+Salaire Base <input type="number" id="salaire">
+Photo <input type="file" id="photo" accept="image/*">
+<button onclick="ajouterEmploye()">Ajouter</button>
+
+<hr>
+
+<h3>🔎 Recherche Employé</h3>
+<input type="text" id="searchInput" placeholder="Rechercher par nom ou prénom">
+<button onclick="searchEmploye()">Rechercher</button>
+<button onclick="afficher()">Réinitialiser</button>
+
+<hr>
+
+<h3>Liste des Employés</h3>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Prénom</th>
+<th>Salaire Total Reçu</th>
+<th>Reste</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="employeTable"></tbody>
+</table>
+
+</div>
+
+<!-- MODAL HISTORIQUE -->
+<div class="modal" id="historyModal">
+<div class="modal-content">
+<span class="close" onclick="fermerHistorique()">&times;</span>
+<h3>Historique des Transactions</h3>
+<div id="historyContent"></div>
+</div>
+</div>
+
+<script>
+
+let employes = JSON.parse(localStorage.getItem("employes")) || [];
+
+function save(){
+localStorage.setItem("employes", JSON.stringify(employes));
+}
+
+/* ===================== */
+/* AFFICHAGE PRINCIPAL */
+/* ===================== */
+function renderTable(list){
+let tbody=document.getElementById("employeTable");
+tbody.innerHTML="";
+
+list.forEach(emp=>{
+
+let tr=document.createElement("tr");
+
+tr.innerHTML=`
+<td>
+${emp.photo ? `<img src="${emp.photo}" class="photo-mini">` : ""}
+${emp.nom}
+</td>
+<td>${emp.prenom}</td>
+<td>${emp.totalRetire} FCFA</td>
+<td>${emp.reste} FCFA</td>
+<td>
+<button onclick="retrait(${emp.id})">Retrait</button>
+<button onclick="depot(${emp.id})">Dépôt</button>
+<button onclick="afficherHistorique(${emp.id})">Historique</button>
+</td>
+`;
+
+tbody.appendChild(tr);
+});
+}
+
+/* 🔥 FIX IMPORTANT */
+function afficher(){
+renderTable(employes);
+}
+
+/* ===================== */
+/* AJOUT EMPLOYÉ */
+/* ===================== */
+function ajouterEmploye(){
+
+let nom=document.getElementById("nom").value.trim();
+let prenom=document.getElementById("prenom").value.trim();
+let salaire=parseInt(document.getElementById("salaire").value);
+let photoInput=document.getElementById("photo");
+
+if(!nom || !prenom || !salaire){
+alert("Remplir tous les champs");
+return;
+}
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+
+employes.push({
+id:Date.now(),
+nom,
+prenom,
+photo:e.target.result || "",
+salaireBase:salaire,
+totalRetire:0,
+reste:salaire,
+transactions:[]
+});
+
+save();
+renderTable(employes);
+
+document.getElementById("nom").value="";
+document.getElementById("prenom").value="";
+document.getElementById("salaire").value="";
+document.getElementById("photo").value="";
+};
+
+if(photoInput.files[0]){
+reader.readAsDataURL(photoInput.files[0]);
+}else{
+reader.onload({target:{result:""}});
+}
+}
+
+/* ===================== */
+/* RECHERCHE FIXÉE */
+/* ===================== */
+function searchEmploye(){
+let q = document.getElementById("searchInput").value.trim().toLowerCase();
+
+if(q === ""){
+renderTable(employes);
+return;
+}
+
+let filtered = employes.filter(e =>
+(e.nom && e.nom.toLowerCase().includes(q)) ||
+(e.prenom && e.prenom.toLowerCase().includes(q))
+);
+
+renderTable(filtered);
+}
+
+/* ===================== */
+/* RETRAIT */
+/* ===================== */
+function retrait(id){
+
+let montant=parseInt(prompt("Montant à retirer :"));
+if(isNaN(montant) || montant<=0) return;
+
+let emp=employes.find(e=>e.id==id);
+
+if(montant>emp.reste){
+alert("Solde insuffisant");
+return;
+}
+
+emp.totalRetire+=montant;
+emp.reste-=montant;
+
+emp.transactions.push({
+type:"Retrait",
+montant,
+date:new Date().toLocaleString()
+});
+
+save();
+renderTable(employes);
+}
+
+/* ===================== */
+/* DEPOT */
+/* ===================== */
+function depot(id){
+
+let montant=parseInt(prompt("Montant à déposer :"));
+if(isNaN(montant) || montant<=0) return;
+
+let emp=employes.find(e=>e.id==id);
+
+emp.reste+=montant;
+
+emp.transactions.push({
+type:"Dépôt",
+montant,
+date:new Date().toLocaleString()
+});
+
+save();
+renderTable(employes);
+}
+
+/* ===================== */
+/* HISTORIQUE */
+/* ===================== */
+function afficherHistorique(id){
+
+let emp=employes.find(e=>e.id==id);
+let div=document.getElementById("historyContent");
+div.innerHTML="";
+
+if(emp.transactions.length===0){
+div.innerHTML="Aucune transaction";
+}else{
+emp.transactions.forEach((t,index)=>{
+div.innerHTML+=`
+<p>
+${t.date} - ${t.type} : ${t.montant} FCFA
+</p>
+`;
+});
+}
+
+document.getElementById("historyModal").style.display="block";
+}
+
+function fermerHistorique(){
+document.getElementById("historyModal").style.display="none";
+}
+
+/* INIT */
+renderTable(employes);
+
+</script>
+</body>
+</html>
