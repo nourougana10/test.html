@@ -1,266 +1,2669 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1e3a8a">
+
 <title>Gestion Gana Ousmane</title>
 
 <style>
-body{font-family:Arial;margin:0;background:#f4f6f9;}
-header{background:#1e3a8a;color:white;text-align:center;padding:20px;}
-.container{width:95%;max-width:1000px;margin:20px auto;background:white;padding:20px;border-radius:10px;}
-input{padding:8px;margin:5px;}
-button{padding:6px 10px;background:#1e3a8a;color:white;border:none;cursor:pointer;}
-button:hover{background:#162d66;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-th{background:#1e3a8a;color:white;}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);}
-.modal-content{background:white;margin:100px auto;padding:20px;width:90%;max-width:600px;border-radius:10px;}
-.close{float:right;cursor:pointer;color:red;font-size:20px;}
-.photo-mini{width:35px;height:35px;border-radius:50%;vertical-align:middle;margin-right:6px;object-fit:cover;}
+*{box-sizing:border-box}
+
+html,body{
+    width:100%;
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#1f2937;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+button{
+    padding:8px 12px;
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:#162d66;
+}
+
+input,select,textarea{
+    max-width:100%;
+    padding:8px;
+    margin:5px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    background:#1e3a8a;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+header h2{
+    margin:0;
+}
+
+header p{
+    margin:7px 0 0;
+}
+
+/* =========================
+   CONTENEUR
+========================= */
+
+.container{
+    width:95%;
+    max-width:1100px;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    min-width:0;
+}
+
+/* =========================
+   MENU BURGER
+========================= */
+
+.burger-menu{
+    position:absolute;
+    top:18px;
+    left:18px;
+    cursor:pointer;
+    font-size:25px;
+    background:transparent;
+    border:none;
+    color:white;
+    z-index:2100;
+    padding:5px 10px;
+}
+
+.burger-menu:hover{
+    background:rgba(255,255,255,.12);
+}
+
+.side-drawer{
+    height:100%;
+    width:0;
+    position:fixed;
+    z-index:3000;
+    top:0;
+    left:0;
+    background:#1e3a8a;
+    overflow-x:hidden;
+    transition:.3s;
+    padding-top:60px;
+    box-shadow:2px 0 8px rgba(0,0,0,.35);
+}
+
+.side-drawer a{
+    padding:14px 24px;
+    text-decoration:none;
+    font-size:18px;
+    color:white;
+    display:block;
+    transition:.2s;
+}
+
+.side-drawer a:hover{
+    background:#162d66;
+}
+
+.close-drawer{
+    position:absolute;
+    top:15px;
+    right:20px;
+    font-size:30px;
+    cursor:pointer;
+    color:white;
+}
+
+/* =========================
+   VUES
+========================= */
+
+.view-section{
+    display:none;
+    min-width:0;
+}
+
+.view-section.active{
+    display:block;
+}
+
+/* =========================
+   TABLEAU DE BORD
+========================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.dashboard-card{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+
+.dashboard-card h4{
+    margin:0 0 8px;
+    color:#1e3a8a;
+    font-size:18px;
+}
+
+.dashboard-card p{
+    margin:0;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* =========================
+   EMPLOYES
+========================= */
+
+.cards-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.employee-card{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.05);
+}
+
+.employee-card img{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    object-fit:cover;
+    margin:0 auto 10px;
+}
+
+.employee-card button{
+    margin:4px;
+}
+
+/* =========================
+   TABLEAU
+========================= */
+
+.table-responsive{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    max-width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:10px 8px;
+    text-align:center;
+    vertical-align:middle;
+    word-break:break-word;
+    white-space:normal;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+.action-cell{
+    white-space:nowrap;
+    padding-top:6px;
+    padding-bottom:6px;
+}
+
+.action-cell button{
+    padding:5px 7px;
+    margin:1px;
+    font-size:11px;
+    line-height:1.1;
+    border-radius:4px;
+    display:inline-block;
+    min-width:0;
+    vertical-align:middle;
+}
+
+.row-edit-input{
+    width:100%;
+    min-width:70px;
+    max-width:140px;
+    padding:5px 6px;
+    font-size:12px;
+    border:1px solid #cbd5e1;
+    border-radius:5px;
+}
+
+#view-table table{
+    table-layout:fixed;
+    min-width:1000px;
+}
+
+#view-table th:nth-child(1),
+#view-table td:nth-child(1){
+    width:16%;
+    min-width:170px;
+}
+
+#view-table th:nth-child(2),
+#view-table td:nth-child(2){
+    width:14%;
+    min-width:150px;
+}
+
+#view-table th:nth-child(3),
+#view-table td:nth-child(3){
+    width:14%;
+    min-width:140px;
+}
+
+#view-table th:nth-child(4),
+#view-table td:nth-child(4){
+    width:16%;
+    min-width:160px;
+}
+
+#view-table th:nth-child(5),
+#view-table td:nth-child(5){
+    width:16%;
+    min-width:160px;
+}
+
+#view-table th:nth-child(6),
+#view-table td:nth-child(6){
+    width:24%;
+    min-width:260px;
+}
+
+.photo-mini{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    vertical-align:middle;
+    margin-right:6px;
+    object-fit:cover;
+    display:inline-block;
+}
+
+/* =========================
+   MODAL HISTORIQUE
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.5);
+    z-index:4000;
+}
+
+.modal-content{
+    background:white;
+    margin:100px auto;
+    padding:20px;
+    width:90%;
+    max-width:600px;
+    border-radius:10px;
+    max-height:80vh;
+    overflow-y:auto;
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    color:red;
+    font-size:25px;
+}
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+.notifications-bar{
+    display:none;
+    padding:12px 14px;
+    margin-bottom:16px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.notifications-bar.success{
+    background:#d1fae5;
+    color:#065f46;
+}
+
+.notifications-bar.warning{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.notifications-bar.error{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+/* =========================
+   FACTURE
+========================= */
+
+.facture-scope{
+    background:#f0f0f0;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+    font-family:"Times New Roman",Times,serif;
+}
+
+.facture-scope *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    box-sizing:border-box;
+}
+
+.document-a4{
+    width:min(210mm,100%);
+    max-width:100%;
+    min-height:297mm;
+    background:white;
+    padding:20mm 15mm 25mm;
+    color:black;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+    position:relative;
+}
+
+.facture-scope [contenteditable="true"]{
+    outline:none;
+    border-radius:3px;
+}
+
+.facture-scope [contenteditable="true"]:hover{
+    background:rgba(22,110,54,.08);
+    cursor:text;
+}
+
+.facture-scope .header{
+    margin-bottom:30px;
+    width:100%;
+}
+
+.header-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:10px;
+}
+
+.header-table td{
+    border:none;
+    padding:0;
+    vertical-align:middle;
+}
+
+.company-name{
+    color:#166e36;
+    font-size:44px;
+    font-weight:900;
+    letter-spacing:1px;
+    line-height:1.1;
+}
+
+.activities-container{
+    border-top:1px solid #e0e0e0;
+    border-bottom:1px solid #e0e0e0;
+    padding:5px 0;
+    background:#fbfbfb;
+    margin-top:10px;
+}
+
+.activities{
+    color:#166e36;
+    font-size:11px;
+    font-style:italic;
+    font-weight:bold;
+    line-height:1.4;
+}
+
+.info-section{
+    text-align:right;
+    margin-bottom:25px;
+}
+
+.date{
+    font-size:14px;
+    margin-bottom:10px;
+    padding:2px 5px;
+    display:inline-block;
+}
+
+.client-box-wrapper{
+    text-align:right;
+    margin-top:5px;
+}
+
+.client-box{
+    display:inline-block;
+    border:3px solid black;
+    padding:8px 20px;
+    font-size:24px;
+    font-weight:bold;
+    text-align:center;
+    min-width:250px;
+}
+
+.document-title{
+    font-size:20px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.document-subject{
+    text-align:center;
+    font-size:16px;
+    margin-bottom:20px;
+    line-height:1.3;
+    text-transform:uppercase;
+}
+
+.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:15px;
+    font-size:14px;
+    table-layout:fixed;
+}
+
+.data-table th,
+.data-table td{
+    border:1px solid black;
+    padding:6px;
+}
+
+.data-table th{
+    white-space:nowrap;
+    background:#f5f5f5;
+    color:#000;
+}
+
+.data-table th:nth-child(1),
+.data-table td:nth-child(1){
+    width:50%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2),
+.data-table th:nth-child(3),
+.data-table td:nth-child(3){
+    width:10%;
+}
+
+.data-table th:nth-child(4),
+.data-table td:nth-child(4),
+.data-table th:nth-child(5),
+.data-table td:nth-child(5){
+    width:15%;
+}
+
+.designation-col{
+    text-align:left;
+    vertical-align:top;
+    padding-left:10px;
+}
+
+.center-col{
+    text-align:center;
+    vertical-align:middle;
+}
+
+.total-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+.total-table td{
+    padding:8px 0;
+    border:none;
+    font-family:"Times New Roman",Times,serif;
+}
+
+.total-table td:first-child{
+    text-align:left;
+    width:70%;
+    font-weight:bold;
+}
+
+.total-table td:last-child{
+    text-align:right;
+    width:30%;
+    white-space:nowrap;
+    font-weight:bold;
+}
+
+.amount-words{
+    font-size:13px;
+    margin-top:15px;
+    padding-left:10px;
+    margin-bottom:25px;
+    line-height:1.4;
+}
+
+.stamp-section{
+    text-align:right;
+    margin-top:15px;
+    margin-right:20px;
+    margin-bottom:40px;
+}
+
+.stamp-container{
+    display:inline-block;
+    text-align:center;
+}
+
+.stamp-title{
+    font-family:Arial,sans-serif;
+    font-size:13px;
+    font-weight:bold;
+    text-decoration:underline;
+    margin-bottom:5px;
+    display:block;
+}
+
+.stamp-image{
+    width:220px;
+    height:auto;
+    display:block;
+    margin-left:auto;
+}
+
+.footer{
+    position:absolute;
+    bottom:15mm;
+    left:15mm;
+    right:15mm;
+    border-top:2px solid #166e36;
+    border-bottom:2px solid #166e36;
+    padding:5px 0;
+    text-align:center;
+    font-family:Arial,sans-serif;
+    font-size:9.5px;
+    color:#166e36;
+    font-weight:bold;
+    line-height:1.4;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+    body{
+        font-size:14px;
+    }
+
+    header{
+        padding:14px 10px;
+    }
+
+    header h2{
+        font-size:18px;
+    }
+
+    header p{
+        font-size:11px;
+        line-height:1.4;
+    }
+
+    .burger-menu{
+        top:8px;
+        left:8px;
+        font-size:23px;
+        width:40px;
+        height:40px;
+    }
+
+    .container{
+        width:96%;
+        padding:12px;
+        margin:10px auto;
+    }
+
+    .side-drawer{
+        width:0;
+    }
+
+    .side-drawer a{
+        font-size:16px;
+        padding:12px 18px;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .cards-grid{
+        grid-template-columns:1fr;
+    }
+
+    #view-table input,
+    #view-table button{
+        max-width:100%;
+    }
+
+    .facture-scope{
+        padding:10px;
+    }
+
+    .document-a4{
+        padding:16px;
+        min-height:auto;
+        box-shadow:none;
+    }
+
+    .header-table,
+    .header-table tr,
+    .header-table td{
+        width:100%;
+        display:block;
+    }
+
+    .company-name{
+        font-size:28px;
+        margin-top:10px;
+    }
+
+    .activities{
+        font-size:11px;
+    }
+
+    .info-section{
+        text-align:left;
+        margin-bottom:15px;
+    }
+
+    .client-box-wrapper{
+        text-align:left;
+    }
+
+    .client-box{
+        display:block;
+        width:100%;
+        min-width:0;
+        font-size:17px;
+    }
+
+    .document-title{
+        font-size:18px;
+    }
+
+    .document-subject{
+        font-size:13px;
+        text-align:left;
+    }
+
+    .data-table{
+        font-size:12px;
+    }
+
+    .data-table th,
+    .data-table td{
+        padding:7px 5px;
+        word-break:break-word;
+        white-space:normal;
+    }
+
+    .stamp-section{
+        text-align:left;
+        margin-right:0;
+    }
+
+    .stamp-image{
+        width:160px;
+    }
+
+    .footer{
+        position:static;
+        margin-top:20px;
+        font-size:9px;
+    }
+}
+
+@media(max-width:480px){
+
+    .company-name{
+        font-size:24px;
+    }
+
+    .client-box{
+        font-size:15px;
+    }
+
+    .data-table{
+        font-size:10px;
+    }
+
+    .stamp-image{
+        width:140px;
+    }
+}
+
+/* =========================
+   IMPRESSION
+========================= */
+
+@media print{
+
+    body{
+        background:white;
+        margin:0;
+    }
+
+    header,
+    .burger-menu,
+    .side-drawer,
+    .modal,
+    .view-section:not(#view-facture){
+        display:none !important;
+    }
+
+    .container{
+        width:100%;
+        max-width:none;
+        margin:0;
+        padding:0;
+        background:white;
+        box-shadow:none;
+    }
+
+    #view-facture{
+        display:block !important;
+    }
+
+    .facture-scope{
+        padding:0;
+        background:white;
+        display:block;
+    }
+
+    .document-a4{
+        width:100%;
+        min-height:auto;
+        box-shadow:none;
+        padding:0;
+    }
+
+    .company-name{
+        font-size:28px;
+    }
+
+    .client-box{
+        font-size:18px;
+    }
+
+    .document-title{
+        font-size:16px;
+    }
+
+    .document-subject{
+        font-size:13px;
+    }
+
+    .data-table{
+        font-size:12px;
+    }
+
+    .stamp-image{
+        width:140px;
+    }
+
+    .footer{
+        position:static;
+        margin-top:10px;
+        font-size:7px;
+    }
+
+    @page{
+        size:A4;
+        margin:8mm;
+    }
+}
 </style>
 </head>
 
 <body>
 
+<!-- =========================
+     MENU BURGER
+========================= -->
+
+<button class="burger-menu" onclick="openDrawer()">☰</button>
+
+<div id="sideDrawer" class="side-drawer">
+
+    <span class="close-drawer" onclick="closeDrawer()">×</span>
+
+    <a href="#" onclick="switchView('table');return false;">
+        📊 Tableau Employés
+    </a>
+
+    <a href="#" onclick="switchView('dashboard');return false;">
+        🏠 Tableau de bord
+    </a>
+
+    <a href="#" onclick="switchView('cards');return false;">
+        👥 Cartes Employé
+    </a>
+
+    <a href="#" onclick="switchView('globalHistory');return false;">
+        📜 Historique
+    </a>
+
+    <a href="#" onclick="switchView('addEmployee');return false;">
+        ➕ Ajouter un Employé
+    </a>
+
+    <a href="#" onclick="switchView('facture');return false;">
+        📄 Facture
+    </a>
+
+</div>
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header>
-<h2>GESTION GANA OUSMANE SARL</h2>
-<p>27 21 72 41 77 | contact@estganaousmanesarl.com | 11 BP 2399 Abidjan 11</p>
+    <h2>GESTION GANA OUSMANE SARL</h2>
+    <p>
+        27 21 72 41 77 |
+        contact@estganaousmanesarl.com |
+        11 BP 2399 Abidjan 11
+    </p>
 </header>
 
-<div class="container">
+<main class="container">
 
-<h3>Ajouter un Employé</h3>
-Nom <input type="text" id="nom">
-Prénom <input type="text" id="prenom">
-Salaire Base <input type="number" id="salaire">
-Photo <input type="file" id="photo" accept="image/*">
-<button onclick="ajouterEmploye()">Ajouter</button>
+<div id="notificationBar" class="notifications-bar"></div>
 
-<hr>
+<!-- =========================
+     TABLEAU EMPLOYES
+========================= -->
 
-<h3>🔎 Recherche Employé</h3>
-<input type="text" id="searchInput" placeholder="Rechercher par nom ou prénom">
-<button onclick="searchEmploye()">Rechercher</button>
-<button onclick="afficher()">Réinitialiser</button>
+<div id="view-table" class="view-section active">
 
-<hr>
+    <h3>🔎 Recherche Employé</h3>
 
-<h3>Liste des Employés</h3>
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher par nom ou prénom"
+        oninput="searchEmploye()"
+    >
 
-<table>
-<thead>
-<tr>
-<th>Nom</th>
-<th>Prénom</th>
-<th>Salaire Total Reçu</th>
-<th>Reste</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="employeTable"></tbody>
-</table>
+    <button onclick="searchEmploye()">
+        Rechercher
+    </button>
+
+    <button onclick="afficher()">
+        Réinitialiser
+    </button>
+
+    <hr>
+
+    <h3>Liste des Employés</h3>
+
+    <div class="table-responsive">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Salaire</th>
+                    <th>Total Reçu</th>
+                    <th>Reste</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="employeTable"></tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
-<!-- MODAL HISTORIQUE -->
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<div id="view-dashboard" class="view-section">
+
+    <h3>🏠 Tableau de bord</h3>
+
+    <div id="dashboardGrid" class="dashboard-grid"></div>
+
+    <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;">
+
+        <button onclick="renderDashboard()">
+            Actualiser
+        </button>
+
+        <button onclick="showLowBalance(50000)">
+            Voir solde inférieur à 50 000
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     CARTES EMPLOYES
+========================= -->
+
+<div id="view-cards" class="view-section">
+
+    <h3>Liste des Employés</h3>
+
+    <div id="cardsGrid" class="cards-grid"></div>
+
+</div>
+
+<!-- =========================
+     HISTORIQUE GLOBAL
+========================= -->
+
+<div id="view-globalHistory" class="view-section">
+
+    <h3>Historique Global de l'Entreprise</h3>
+
+    <div id="globalHistoryContent"></div>
+
+</div>
+
+<!-- =========================
+     AJOUT EMPLOYE
+========================= -->
+
+<div id="view-addEmployee" class="view-section">
+
+    <h3>Ajouter un Employé</h3>
+
+    <p>
+        <label>Nom</label><br>
+        <input type="text" id="nom">
+    </p>
+
+    <p>
+        <label>Prénom</label><br>
+        <input type="text" id="prenom">
+    </p>
+
+    <p>
+        <label>Salaire Base</label><br>
+        <input type="number" id="salaire" value="75000">
+    </p>
+
+    <p>
+        <label>Photo</label><br>
+        <input type="file" id="photo" accept="image/*">
+    </p>
+
+    <button onclick="ajouterEmploye()">
+        Ajouter l'employé
+    </button>
+
+</div>
+
+<!-- =========================
+     FACTURE
+========================= -->
+
+<div id="view-facture" class="view-section">
+
+<div class="facture-scope">
+
+<div class="document-a4">
+
+    <div class="header">
+
+        <table class="header-table">
+
+            <tr>
+
+                <td style="width:150px;">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 100 100"
+                        width="130"
+                        height="130">
+
+                        <polygon
+                            points="50,10 15,30 50,50 85,30"
+                            fill="#1e8a47"/>
+
+                        <polygon
+                            points="15,30 15,70 50,90 50,50"
+                            fill="#166e36"/>
+
+                        <polygon
+                            points="50,50 50,90 85,70 85,30"
+                            fill="#0f4d25"/>
+
+                        <path
+                            d="M15,30 L50,50 L85,30 M50,50 L50,90"
+                            stroke="white"
+                            stroke-width="1.5"
+                            fill="none"/>
+
+                        <polygon
+                            points="22.7,34.4 29,38 51.8,25 45.5,21.4"
+                            fill="white"/>
+
+                        <polygon
+                            points="36,42 42.3,45.6 65.1,32.6 58.8,29"
+                            fill="white"/>
+
+                        <polygon
+                            points="58.8,55 58.8,75 76.3,65 76.3,45"
+                            fill="white"/>
+
+                        <polygon
+                            points="50,56 27.3,43 27.3,68 43,77 43,73 35,68.4 35,63.4 50,72"
+                            fill="white"/>
+
+                    </svg>
+
+                </td>
+
+                <td style="padding-left:15px;">
+
+                    <div class="company-name">
+                        GANA OUSMANE
+                    </div>
+
+                </td>
+
+            </tr>
+
+        </table>
+
+        <div class="activities-container">
+
+            <div class="activities">
+
+                ENTREPRISE D'ASSAINISSEMENT ET DE DRAINAGE -
+                BÂTIMENTS - TRAVAUX PUBLICS -
+                <br>
+
+                SALUBRITE - HYDRAULIQUES -
+                VOIRIES ET RESEAUX DIVERS
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="info-section">
+
+        <div class="date" contenteditable="true">
+            Abidjan le, 30 Avril 2026
+        </div>
+
+        <div class="client-box-wrapper">
+
+            <div class="client-box" contenteditable="true">
+                LOGSTRANS-CI
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="document-title">
+
+        <u>
+            <em>
+                <strong contenteditable="true">
+                    FACTURE PROFORMA N°0020/26
+                </strong>
+            </em>
+        </u>
+
+    </div>
+
+    <div class="document-subject">
+
+        <u><em>Objet :</em></u>
+
+        <span contenteditable="true">
+
+            VIDANGE DES FOSSES SEPTIQUES DES BUREAUX
+            <br>
+            ADMINISTRATIFS
+
+        </span>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>DÉSIGNATION</th>
+                    <th>U</th>
+                    <th>QTE</th>
+                    <th>P.UNITAIRE</th>
+                    <th>P.TOTAL</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td
+                        class="designation-col"
+                        contenteditable="true">
+
+                        Vidange, débouchage et curage y compris
+                        toutes sujétions de :
+                        <br><br>
+
+                        02 fosses septiques,
+                        <br>
+
+                        01 puits perdu
+                        <br>
+
+                        03 regards
+                        <br><br><br>
+
+                    </td>
+
+                    <td
+                        class="center-col"
+                        contenteditable="true">
+                        U
+                    </td>
+
+                    <td
+                        class="center-col"
+                        contenteditable="true">
+                        01
+                    </td>
+
+                    <td
+                        class="center-col"
+                        contenteditable="true">
+                        250 000
+                    </td>
+
+                    <td
+                        class="center-col"
+                        contenteditable="true">
+                        250 000
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <table class="total-table">
+
+        <tr>
+            <td>MONTANT HT</td>
+            <td contenteditable="true">250 000</td>
+        </tr>
+
+        <tr>
+            <td>REMISE</td>
+            <td contenteditable="true">20 000</td>
+        </tr>
+
+        <tr>
+            <td>MONTANT TOTAL HT</td>
+            <td contenteditable="true">230 000</td>
+        </tr>
+
+        <tr>
+            <td>TVA 18%</td>
+            <td contenteditable="true">41 400</td>
+        </tr>
+
+        <tr>
+            <td>MONTANT TOTAL TTC</td>
+            <td contenteditable="true">271 400</td>
+        </tr>
+
+    </table>
+
+    <div class="amount-words">
+
+        <strong>
+
+            Arrêté le présent devis à la somme de :
+
+            <span contenteditable="true">
+
+                DEUX CENT SOIXANTE ONZE MILLE
+                QUATRE CENT
+                <br>
+                FRANCS CFA
+
+            </span>
+
+        </strong>
+
+    </div>
+
+    <div class="stamp-section">
+
+        <div class="stamp-container">
+
+            <span class="stamp-title">
+                Cachet et Signature
+            </span>
+
+            <img
+                class="stamp-image"
+                src="tampon-signature.png"
+                alt="Cachet et Signature GANA OUSMANE">
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+        Marcory Boulevard Lorraine Face Ecole Cours Lamartine -
+        11 BP 2399 Abidjan 11 -
+        RC-N°CI-ABJ-1994-A-175946-
+
+        <br>
+
+        Compte bancaire N°:
+        CI007 01042 334687900100 33
+        SIB Marcory -
+
+        Tél:
+        27 21 72 41 77 /
+
+        Cél:
+        07 07 07 74 82 /
+        07 78 73 44 49
+
+        <br>
+
+        07 07 97 98 40 /
+        07 08 29 93 08 -
+
+        Email:
+        ganaousmane@aviso.ci
+
+        <br>
+
+        N°CC : 9509882 F -
+        Régime d'imposition :
+        Réel Normal -
+        CDI de Marcory I
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<!-- =========================
+     MODAL HISTORIQUE
+========================= -->
+
 <div class="modal" id="historyModal">
-<div class="modal-content">
-<span class="close" onclick="fermerHistorique()">&times;</span>
-<h3>Historique des Transactions</h3>
-<div id="historyContent"></div>
-</div>
+
+    <div class="modal-content">
+
+        <span
+            class="close"
+            onclick="fermerHistorique()">
+            ×
+        </span>
+
+        <h3>Historique des Transactions</h3>
+
+        <div id="historyContent"></div>
+
+    </div>
+
 </div>
 
 <script>
 
-let employes = JSON.parse(localStorage.getItem("employes")) || [];
+if (localStorage.getItem('ganaConnected') !== 'true') {
+    window.location.href = 'connexion.html';
+}
+
+/* =====================================
+   DONNEES
+===================================== */
+
+let employes =
+    JSON.parse(localStorage.getItem("employes")) || [];
+
+let globalHistory =
+    JSON.parse(localStorage.getItem("globalHistory")) || [];
+
+
+/* =====================================
+   SAUVEGARDE
+===================================== */
 
 function save(){
-localStorage.setItem("employes", JSON.stringify(employes));
+
+    localStorage.setItem(
+        "employes",
+        JSON.stringify(employes)
+    );
+
+    localStorage.setItem(
+        "globalHistory",
+        JSON.stringify(globalHistory)
+    );
 }
 
-/* ===================== */
-/* AFFICHAGE PRINCIPAL */
-/* ===================== */
+
+/* =====================================
+   HISTORIQUE GLOBAL
+===================================== */
+
+function logGlobal(description){
+
+    globalHistory.unshift({
+
+        date:new Date().toLocaleString(),
+
+        description:description
+
+    });
+
+    save();
+
+    renderGlobalHistory();
+}
+
+
+/* =====================================
+   NOTIFICATION
+===================================== */
+
+function showNotification(
+    message,
+    type="success"
+){
+
+    const bar =
+        document.getElementById(
+            "notificationBar"
+        );
+
+    bar.className =
+        "notifications-bar " + type;
+
+    bar.textContent = message;
+
+    bar.style.display = "block";
+
+    setTimeout(function(){
+
+        bar.style.display = "none";
+
+    },4000);
+}
+
+
+/* =====================================
+   MENU BURGER
+===================================== */
+
+function openDrawer(){
+
+    const drawer =
+        document.getElementById("sideDrawer");
+
+    if(window.innerWidth <= 480){
+
+        drawer.style.width = "100%";
+
+    }else if(window.innerWidth <= 768){
+
+        drawer.style.width = "80%";
+
+    }else{
+
+        drawer.style.width = "280px";
+
+    }
+
+}
+
+
+function closeDrawer(){
+
+    document.getElementById(
+        "sideDrawer"
+    ).style.width = "0";
+
+}
+
+
+/* =====================================
+   CHANGEMENT DE VUE
+===================================== */
+
+function switchView(viewName){
+
+    closeDrawer();
+
+    document
+        .querySelectorAll(".view-section")
+        .forEach(function(section){
+
+            section.classList.remove("active");
+
+        });
+
+    const view =
+        document.getElementById(
+            "view-" + viewName
+        );
+
+    if(view){
+
+        view.classList.add("active");
+
+    }
+
+    if(viewName === "dashboard"){
+
+        renderDashboard();
+
+    }
+
+    if(viewName === "cards"){
+
+        renderCards();
+
+    }
+
+    if(viewName === "globalHistory"){
+
+        renderGlobalHistory();
+
+    }
+
+}
+
+
+/* =====================================
+   DASHBOARD
+===================================== */
+
+function renderDashboard(){
+
+    const grid =
+        document.getElementById(
+            "dashboardGrid"
+        );
+
+    if(!grid)return;
+
+    const totalEmployees =
+        employes.length;
+
+    const totalPaid =
+        employes.reduce(
+            function(sum,emp){
+
+                return sum +
+                    (parseInt(emp.totalRetire) || 0);
+
+            },
+            0
+        );
+
+    const totalRemaining =
+        employes.reduce(
+            function(sum,emp){
+
+                return sum +
+                    (parseInt(emp.reste) || 0);
+
+            },
+            0
+        );
+
+    const lowBalanceCount =
+        employes.filter(
+            function(emp){
+
+                return (
+                    parseInt(emp.reste) || 0
+                ) < 50000;
+
+            }
+        ).length;
+
+    grid.innerHTML = `
+
+        <div class="dashboard-card">
+
+            <h4>Total employés</h4>
+
+            <p>${totalEmployees}</p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h4>Total payé</h4>
+
+            <p>
+                ${totalPaid.toLocaleString("fr-FR")}
+                FCFA
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h4>Total restant</h4>
+
+            <p>
+                ${totalRemaining.toLocaleString("fr-FR")}
+                FCFA
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h4>Soldes faibles</h4>
+
+            <p>
+                ${lowBalanceCount} employé(s)
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+function showLowBalance(threshold){
+
+    const employees =
+        employes.filter(function(emp){
+
+            return (
+                parseInt(emp.reste) || 0
+            ) < threshold;
+
+        });
+
+    if(employees.length === 0){
+
+        showNotification(
+            "Aucun employé avec un solde inférieur à " +
+            threshold.toLocaleString("fr-FR") +
+            " FCFA."
+        );
+
+        return;
+
+    }
+
+    const names =
+        employees.map(function(emp){
+
+            return emp.nom + " " + emp.prenom;
+
+        }).join(", ");
+
+    showNotification(
+        "Solde bas : " + names,
+        "warning"
+    );
+
+}
+
+
+/* =====================================
+   TABLEAU
+===================================== */
+
 function renderTable(list){
-let tbody=document.getElementById("employeTable");
-tbody.innerHTML="";
 
-list.forEach(emp=>{
+    const tbody =
+        document.getElementById(
+            "employeTable"
+        );
 
-let tr=document.createElement("tr");
+    tbody.innerHTML = "";
 
-tr.innerHTML=`
-<td>
-${emp.photo ? `<img src="${emp.photo}" class="photo-mini">` : ""}
-${emp.nom}
-</td>
-<td>${emp.prenom}</td>
-<td>${emp.totalRetire} FCFA</td>
-<td>${emp.reste} FCFA</td>
-<td>
-<button onclick="retrait(${emp.id})">Retrait</button>
-<button onclick="depot(${emp.id})">Dépôt</button>
-<button onclick="afficherHistorique(${emp.id})">Historique</button>
-</td>
-`;
+    if(list.length === 0){
 
-tbody.appendChild(tr);
-});
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+                    Aucun employé enregistré.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    list.forEach(function(emp){
+
+        const tr =
+            document.createElement("tr");
+
+        tr.dataset.id = emp.id;
+
+        tr.innerHTML = `
+
+            <td>
+
+                ${
+                    emp.photo
+                    ?
+                    `<img
+                        src="${emp.photo}"
+                        class="photo-mini">`
+                    :
+                    ""
+                }
+
+                <span
+                    contenteditable="true"
+                    onblur="saveEditedField(
+                        ${emp.id},
+                        'nom',
+                        this.innerText
+                    )">
+
+                    ${emp.nom}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <span
+                    contenteditable="true"
+                    onblur="saveEditedField(
+                        ${emp.id},
+                        'prenom',
+                        this.innerText
+                    )">
+
+                    ${emp.prenom}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                ${Number(emp.salaireBase || 0)
+                    .toLocaleString("fr-FR")}
+
+                FCFA
+
+            </td>
+
+            <td>
+
+                <span
+                    contenteditable="true"
+                    onblur="saveEditedField(
+                        ${emp.id},
+                        'totalRetire',
+                        this.innerText
+                    )">
+
+                    ${Number(emp.totalRetire || 0)
+                        .toLocaleString("fr-FR")}
+
+                </span>
+
+                FCFA
+
+            </td>
+
+            <td>
+
+                <span
+                    contenteditable="true"
+                    onblur="saveEditedField(
+                        ${emp.id},
+                        'reste',
+                        this.innerText
+                    )">
+
+                    ${Number(emp.reste || 0)
+                        .toLocaleString("fr-FR")}
+
+                </span>
+
+                FCFA
+
+            </td>
+
+            <td class="action-cell">
+
+                <button
+                    onclick="retrait(${emp.id})">
+                    Retrait
+                </button>
+
+                <button
+                    onclick="depot(${emp.id})">
+                    Dépôt
+                </button>
+
+                <button
+                    onclick="afficherHistorique(${emp.id})">
+                    Historique
+                </button>
+
+                <button
+                    onclick="modifierEmploye(${emp.id})"
+                    style="background:#1e3a8a;">
+                    Modifier
+                </button>
+
+            </td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
 }
 
-/* 🔥 FIX IMPORTANT */
+
+/* =====================================
+   CARTES
+===================================== */
+
+function renderCards(){
+
+    const grid =
+        document.getElementById(
+            "cardsGrid"
+        );
+
+    grid.innerHTML = "";
+
+    if(employes.length === 0){
+
+        grid.innerHTML =
+            "<p>Aucun employé enregistré.</p>";
+
+        return;
+
+    }
+
+    employes.forEach(function(emp){
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "employee-card";
+
+        card.innerHTML = `
+
+            ${
+                emp.photo
+                ?
+                `<img src="${emp.photo}">`
+                :
+                `<div style="
+                    width:75px;
+                    height:75px;
+                    border-radius:50%;
+                    margin:auto;
+                    background:#e5e7eb;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:30px;">
+                    👤
+                </div>`
+            }
+
+            <h4>
+
+                ${emp.nom}
+                ${emp.prenom}
+
+            </h4>
+
+            <p>
+
+                Salaire :
+                <strong>
+                    ${Number(emp.salaireBase || 0)
+                        .toLocaleString("fr-FR")}
+                    FCFA
+                </strong>
+
+            </p>
+
+            <p>
+
+                Total reçu :
+                ${Number(emp.totalRetire || 0)
+                    .toLocaleString("fr-FR")}
+                FCFA
+
+            </p>
+
+            <p>
+
+                Reste :
+                <strong>
+                    ${Number(emp.reste || 0)
+                        .toLocaleString("fr-FR")}
+                    FCFA
+                </strong>
+
+            </p>
+
+            <button
+                onclick="retrait(${emp.id})">
+                Retrait
+            </button>
+
+            <button
+                onclick="depot(${emp.id})">
+                Dépôt
+            </button>
+
+            <button
+                onclick="afficherHistorique(${emp.id})">
+                Historique
+            </button>
+
+            <button
+                onclick="modifierEmploye(${emp.id})"
+                style="background:#d97706;">
+                Modifier
+            </button>
+
+            <button
+                onclick="supprimerEmploye(${emp.id})"
+                style="background:#b91c1c;">
+                Supprimer
+            </button>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================
+   HISTORIQUE GLOBAL
+===================================== */
+
+function renderGlobalHistory(){
+
+    const div =
+        document.getElementById(
+            "globalHistoryContent"
+        );
+
+    div.innerHTML = "";
+
+    if(globalHistory.length === 0){
+
+        div.innerHTML =
+            "<p>Aucune transaction enregistrée.</p>";
+
+        return;
+
+    }
+
+    globalHistory.forEach(function(item){
+
+        div.innerHTML += `
+
+            <p>
+
+                <strong>
+                    ${item.date}
+                </strong>
+
+                -
+                ${item.description}
+
+            </p>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================
+   REINITIALISER L'AFFICHAGE
+===================================== */
+
 function afficher(){
-renderTable(employes);
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    renderTable(employes);
+
 }
 
-/* ===================== */
-/* AJOUT EMPLOYÉ */
-/* ===================== */
+
+/* =====================================
+   AJOUT EMPLOYE
+===================================== */
+
 function ajouterEmploye(){
 
-let nom=document.getElementById("nom").value.trim();
-let prenom=document.getElementById("prenom").value.trim();
-let salaire=parseInt(document.getElementById("salaire").value);
-let photoInput=document.getElementById("photo");
+    const nom =
+        document.getElementById(
+            "nom"
+        ).value.trim();
 
-if(!nom || !prenom || !salaire){
-alert("Remplir tous les champs");
-return;
+    const prenom =
+        document.getElementById(
+            "prenom"
+        ).value.trim();
+
+    const salaire =
+        parseInt(
+            document.getElementById(
+                "salaire"
+            ).value
+        );
+
+    const photoInput =
+        document.getElementById(
+            "photo"
+        );
+
+    if(!nom || !prenom || !salaire){
+
+        alert(
+            "Veuillez remplir tous les champs."
+        );
+
+        return;
+
+    }
+
+    const ajouter = function(photo){
+
+        const employe = {
+
+            id:Date.now(),
+
+            nom:nom,
+
+            prenom:prenom,
+
+            photo:photo || "",
+
+            salaireBase:salaire,
+
+            totalRetire:0,
+
+            reste:salaire,
+
+            transactions:[]
+
+        };
+
+        employes.push(employe);
+
+        save();
+
+        logGlobal(
+            "Ajout de l'employé : " +
+            nom +
+            " " +
+            prenom +
+            " - Salaire : " +
+            salaire +
+            " FCFA"
+        );
+
+        renderTable(employes);
+
+        renderCards();
+
+        renderDashboard();
+
+        document.getElementById("nom").value = "";
+        document.getElementById("prenom").value = "";
+        document.getElementById("salaire").value = "";
+        document.getElementById("photo").value = "";
+
+        switchView("table");
+
+        showNotification(
+            "Employé ajouté avec succès."
+        );
+
+    };
+
+    if(photoInput.files[0]){
+
+        const reader =
+            new FileReader();
+
+        reader.onload = function(e){
+
+            ajouter(e.target.result);
+
+        };
+
+        reader.readAsDataURL(
+            photoInput.files[0]
+        );
+
+    }else{
+
+        ajouter("");
+
+    }
+
 }
 
-let reader=new FileReader();
 
-reader.onload=function(e){
+/* =====================================
+   MODIFIER EMPLOYE
+===================================== */
 
-employes.push({
-id:Date.now(),
-nom,
-prenom,
-photo:e.target.result || "",
-salaireBase:salaire,
-totalRetire:0,
-reste:salaire,
-transactions:[]
-});
+function modifierEmploye(id){
 
-save();
-renderTable(employes);
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
 
-document.getElementById("nom").value="";
-document.getElementById("prenom").value="";
-document.getElementById("salaire").value="";
-document.getElementById("photo").value="";
-};
+    if(!emp)return;
 
-if(photoInput.files[0]){
-reader.readAsDataURL(photoInput.files[0]);
-}else{
-reader.onload({target:{result:""}});
+    const row =
+        document.querySelector(
+            '#employeTable tr[data-id="' + id + '"]'
+        );
+
+    if(!row)return;
+
+    const escapeForInput = function(value){
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    };
+
+    row.children[0].innerHTML = `
+        <input
+            class="row-edit-input"
+            value="${escapeForInput(emp.nom)}"
+            data-field="nom">
+    `;
+
+    row.children[1].innerHTML = `
+        <input
+            class="row-edit-input"
+            value="${escapeForInput(emp.prenom)}"
+            data-field="prenom">
+    `;
+
+    row.children[2].innerHTML = `
+        <input
+            class="row-edit-input"
+            type="number"
+            value="${Number(emp.salaireBase || 0)}"
+            data-field="salaireBase">
+    `;
+
+    row.children[3].innerHTML = `
+        <input
+            class="row-edit-input"
+            type="number"
+            value="${Number(emp.totalRetire || 0)}"
+            data-field="totalRetire">
+    `;
+
+    row.children[4].innerHTML = `
+        <input
+            class="row-edit-input"
+            type="number"
+            value="${Number(emp.reste || 0)}"
+            data-field="reste">
+    `;
+
+    row.children[5].innerHTML = `
+        <button onclick="enregistrerEmploye(${id})">Enregistrer</button>
+        <button onclick="renderTable(employes)" style="background:#6b7280;">Annuler</button>
+    `;
+
 }
+
+function enregistrerEmploye(id){
+
+    const row =
+        document.querySelector(
+            '#employeTable tr[data-id="' + id + '"]'
+        );
+
+    if(!row)return;
+
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
+
+    if(!emp)return;
+
+    const nom =
+        row.querySelector('[data-field="nom"]').value.trim();
+
+    const prenom =
+        row.querySelector('[data-field="prenom"]').value.trim();
+
+    const salaireBase =
+        parseInt(
+            row.querySelector('[data-field="salaireBase"]').value
+        ) || 0;
+
+    const totalRetire =
+        parseInt(
+            row.querySelector('[data-field="totalRetire"]').value
+        ) || 0;
+
+    const reste =
+        parseInt(
+            row.querySelector('[data-field="reste"]').value
+        ) || 0;
+
+    if(!nom || !prenom){
+        alert("Le nom et le prénom sont obligatoires.");
+        return;
+    }
+
+    emp.nom = nom;
+    emp.prenom = prenom;
+    emp.salaireBase = salaireBase;
+    emp.totalRetire = totalRetire;
+    emp.reste = reste;
+
+    save();
+
+    logGlobal(
+        "Modification de l'employé : " +
+        emp.nom +
+        " " +
+        emp.prenom
+    );
+
+    renderTable(employes);
+    renderCards();
+    renderDashboard();
+
 }
 
-/* ===================== */
-/* RECHERCHE FIXÉE */
-/* ===================== */
+
+/* =====================================
+   MODIFICATION DIRECTE
+===================================== */
+
+function saveEditedField(
+    id,
+    field,
+    newVal
+){
+
+    const emp =
+        employes.find(
+            function(e){
+                return String(e.id) === String(id);
+            }
+        );
+
+    if(!emp)return;
+
+    if(
+        field === "totalRetire" ||
+        field === "reste"
+    ){
+
+        newVal =
+            parseInt(
+                String(newVal)
+                .replace(/[^0-9]/g,"")
+            ) || 0;
+
+    }
+
+    emp[field] = newVal;
+
+    save();
+
+    renderDashboard();
+
+}
+
+
+/* =====================================
+   RECHERCHE
+===================================== */
+
 function searchEmploye(){
-let q = document.getElementById("searchInput").value.trim().toLowerCase();
 
-if(q === ""){
-renderTable(employes);
-return;
+    const q =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+    if(q === ""){
+
+        renderTable(employes);
+
+        return;
+
+    }
+
+    const filtered =
+        employes.filter(
+            function(emp){
+
+                return (
+
+                    (
+                        emp.nom &&
+                        emp.nom
+                        .toLowerCase()
+                        .includes(q)
+                    )
+
+                    ||
+
+                    (
+                        emp.prenom &&
+                        emp.prenom
+                        .toLowerCase()
+                        .includes(q)
+                    )
+
+                );
+
+            }
+        );
+
+    renderTable(filtered);
+
 }
 
-let filtered = employes.filter(e =>
-(e.nom && e.nom.toLowerCase().includes(q)) ||
-(e.prenom && e.prenom.toLowerCase().includes(q))
-);
 
-renderTable(filtered);
-}
+/* =====================================
+   RETRAIT
+===================================== */
 
-/* ===================== */
-/* RETRAIT */
-/* ===================== */
 function retrait(id){
 
-let montant=parseInt(prompt("Montant à retirer :"));
-if(isNaN(montant) || montant<=0) return;
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
 
-let emp=employes.find(e=>e.id==id);
+    if(!emp)return;
 
-if(montant>emp.reste){
-alert("Solde insuffisant");
-return;
+    const montant =
+        parseInt(
+            prompt(
+                "Montant à retirer :"
+            )
+        );
+
+    if(
+        isNaN(montant) ||
+        montant <= 0
+    ){
+
+        return;
+
+    }
+
+    if(montant > emp.reste){
+
+        alert(
+            "Solde insuffisant."
+        );
+
+        return;
+
+    }
+
+    emp.reste -= montant;
+
+    emp.transactions.push({
+
+        type:"Retrait",
+
+        montant:montant,
+
+        date:new Date()
+            .toLocaleString()
+
+    });
+
+    save();
+
+    logGlobal(
+        "Retrait de " +
+        montant +
+        " FCFA pour " +
+        emp.nom +
+        " " +
+        emp.prenom
+    );
+
+    renderTable(employes);
+    renderCards();
+    renderDashboard();
+
 }
 
-emp.totalRetire+=montant;
-emp.reste-=montant;
 
-emp.transactions.push({
-type:"Retrait",
-montant,
-date:new Date().toLocaleString()
-});
+/* =====================================
+   DEPOT / VERSEMENT SALAIRE
+===================================== */
 
-save();
-renderTable(employes);
-}
-
-/* ===================== */
-/* DEPOT */
-/* ===================== */
 function depot(id){
 
-let montant=parseInt(prompt("Montant à déposer :"));
-if(isNaN(montant) || montant<=0) return;
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
 
-let emp=employes.find(e=>e.id==id);
+    if(!emp)return;
 
-emp.reste+=montant;
+    const montant =
+        parseInt(
+            prompt(
+                "Montant du versement :",
+                emp.salaireBase || 75000
+            )
+        );
 
-emp.transactions.push({
-type:"Dépôt",
-montant,
-date:new Date().toLocaleString()
-});
+    if(
+        isNaN(montant) ||
+        montant <= 0
+    ){
 
-save();
-renderTable(employes);
+        return;
+
+    }
+
+    emp.totalRetire += montant;
+
+    emp.reste += montant;
+
+    emp.transactions.push({
+
+        type:"Dépôt",
+
+        montant:montant,
+
+        date:new Date()
+            .toLocaleString()
+
+    });
+
+    save();
+
+    logGlobal(
+        "Dépôt de " +
+        montant +
+        " FCFA pour " +
+        emp.nom +
+        " " +
+        emp.prenom
+    );
+
+    renderTable(employes);
+    renderCards();
+    renderDashboard();
+
 }
 
-/* ===================== */
-/* HISTORIQUE */
-/* ===================== */
+
+/* =====================================
+   SUPPRIMER EMPLOYE
+===================================== */
+
+function supprimerEmploye(id){
+
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
+
+    if(!emp)return;
+
+    const confirmation =
+        confirm(
+            "Voulez-vous vraiment supprimer " +
+            emp.nom +
+            " " +
+            emp.prenom +
+            " ?"
+        );
+
+    if(!confirmation)return;
+
+    employes =
+        employes.filter(
+            function(e){
+                return e.id != id;
+            }
+        );
+
+    save();
+
+    logGlobal(
+        "Suppression de l'employé : " +
+        emp.nom +
+        " " +
+        emp.prenom
+    );
+
+    renderTable(employes);
+    renderCards();
+    renderDashboard();
+
+}
+
+
+/* =====================================
+   HISTORIQUE EMPLOYE
+===================================== */
+
 function afficherHistorique(id){
 
-let emp=employes.find(e=>e.id==id);
-let div=document.getElementById("historyContent");
-div.innerHTML="";
+    const emp =
+        employes.find(
+            function(e){
+                return e.id == id;
+            }
+        );
 
-if(emp.transactions.length===0){
-div.innerHTML="Aucune transaction";
-}else{
-emp.transactions.forEach((t,index)=>{
-div.innerHTML+=`
-<p>
-${t.date} - ${t.type} : ${t.montant} FCFA
-</p>
-`;
-});
+    if(!emp)return;
+
+    const div =
+        document.getElementById(
+            "historyContent"
+        );
+
+    div.innerHTML = "";
+
+    if(
+        !emp.transactions ||
+        emp.transactions.length === 0
+    ){
+
+        div.innerHTML =
+            "<p>Aucune transaction.</p>";
+
+    }else{
+
+        emp.transactions.forEach(
+            function(t){
+
+                div.innerHTML += `
+
+                    <p>
+                        ${t.date}
+                        -
+                        <strong>
+                            ${t.type}
+                        </strong>
+                        :
+                        ${Number(t.montant)
+                            .toLocaleString("fr-FR")}
+                        FCFA
+                    </p>
+
+                `;
+
+            }
+        );
+
+    }
+
+    document.getElementById(
+        "historyModal"
+    ).style.display = "block";
+
 }
 
-document.getElementById("historyModal").style.display="block";
-}
 
 function fermerHistorique(){
-document.getElementById("historyModal").style.display="none";
+
+    document.getElementById(
+        "historyModal"
+    ).style.display = "none";
+
 }
 
-/* INIT */
+
+/* =====================================
+   INITIALISATION
+===================================== */
+
 renderTable(employes);
 
+renderCards();
+
+renderDashboard();
+
+renderGlobalHistory();
+
 </script>
+
 </body>
 </html>
